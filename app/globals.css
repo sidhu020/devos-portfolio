@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+:root {
+  /* DevOS design tokens (Phase 1) */
+  --devos-bg: #050816;
+  --devos-surface: #0f172a;
+  --devos-accent: #38bdf8;
+  --devos-cyan: #22d3ee;
+  --devos-purple: #8b5cf6;
+  --devos-text: #e2e8f0;
+  --devos-muted: #94a3b8;
+  --devos-border: rgba(255, 255, 255, 0.08);
+
+  /* Back-compat for existing usage */
+  --background: var(--devos-bg);
+  --foreground: var(--devos-text);
+}
+
+@theme inline {
+  /* Tailwind v4 CSS theme tokens */
+  --color-background: var(--devos-bg);
+  --color-foreground: var(--devos-text);
+
+  --color-devos-bg: var(--devos-bg);
+  --color-devos-surface: var(--devos-surface);
+  --color-devos-accent: var(--devos-accent);
+  --color-devos-cyan: var(--devos-cyan);
+  --color-devos-purple: var(--devos-purple);
+  --color-devos-text: var(--devos-text);
+  --color-devos-muted: var(--devos-muted);
+  --color-devos-border: var(--devos-border);
+
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+
+  --radius-devos: 16px;
+}
+
+* {
+  border-color: var(--devos-border);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  /* Fixed navbar offset for anchor links */
+  scroll-padding-top: 96px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--devos-bg);
+  color: var(--devos-text);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Hide default cursor on desktop when custom cursor is active */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  a, button, input, textarea, select, [role="button"], [tabindex] {
+    cursor: none;
+  }
+}
+
+/* ─── Subtle premium utilities ─── */
+.devos-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-position: center;
+  mask-image: radial-gradient(60% 55% at 50% 40%, black 40%, transparent 75%);
+}
+
+.devos-glass {
+  background: color-mix(in oklab, var(--devos-surface) 72%, transparent);
+  border: 1px solid var(--devos-border);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  backdrop-filter: blur(14px);
+}
+
+.devos-focus-ring:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--devos-accent) 55%, transparent),
+    0 0 0 6px color-mix(in oklab, var(--devos-accent) 20%, transparent);
+}
+
+/* ─── Micro-interaction: Card tilt hover ─── */
+.devos-tilt {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.devos-tilt:hover {
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* ─── Micro-interaction: Magnetic button glow ─── */
+.devos-btn-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.devos-btn-glow::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: radial-gradient(
+    120px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(56, 189, 248, 0.15),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.devos-btn-glow:hover::before {
+  opacity: 1;
+}
+
+/* ─── Scroll reveal animation ─── */
+.devos-reveal {
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  filter: blur(4px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.devos-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+}
+
+/* ─── Matrix mode theme ─── */
+body[data-matrix] {
+  --devos-accent: #00ff41;
+  --devos-cyan: #00ff41;
+  --devos-text: #c0ffc0;
+  --devos-muted: #5a8a5a;
+  --devos-bg: #020a02;
+  --devos-surface: #041204;
+  --devos-border: rgba(0, 255, 65, 0.12);
+}
+
+body[data-matrix]::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 2px,
+      rgba(0, 255, 65, 0.03) 3px,
+      transparent 4px
+    );
+  mix-blend-mode: overlay;
+}
+
+/* ─── Smooth scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .devos-reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
